@@ -95,6 +95,36 @@ nav li {
 	font-size: 1.2em;
 }
 
+nav a {
+	color: inherit;
+	text-decoration: none;
+}
+
+nav a[aria-current="page"] {
+	font-weight: 700;
+}
+
+/* Espacement des liens repris du menu de la maquette. */
+header nav ul {
+	gap: 44px;
+}
+
+header nav li {
+	padding: 0;
+	font-size: 16px;
+}
+
+header nav a {
+	display: block;
+	width: 55px;
+	text-align: center;
+}
+
+header nav img {
+	width: 20px;
+	height: 20px;
+}
+
 li:hover {
 	color: #B1663C;
 }
@@ -220,4 +250,102 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+}
+
+/* Page de connexion */
+.login-page {
+	max-width: none;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background-color: #FFFEF8;
+}
+
+.login-page header {
+	width: calc(100% - 40px);
+	max-width: 1140px;
+	margin: 50px auto;
+	gap: 24px;
+	flex-wrap: wrap;
+}
+
+.login-page main {
+	flex: 1;
+}
+
+#login {
+	width: 379px;
+	max-width: calc(100% - 40px);
+	margin: 120px auto 80px;
+}
+
+#login h2 {
+	text-align: center;
+	margin-bottom: 37px;
+}
+
+#login form {
+	display: flex;
+	flex-direction: column;
+}
+
+#login label {
+	margin-bottom: 7px;
+}
+
+#login input {
+	box-sizing: border-box;
+	width: 100%;
+	height: 51px;
+	margin-bottom: 30px;
+	padding: 0 12px;
+	border: none;
+	background-color: white;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+	font: inherit;
+}
+
+#login button {
+	width: 179px;
+	min-height: 36px;
+	margin: 7px auto 28px;
+	border: none;
+	border-radius: 60px;
+	background-color: #1D6154;
+	color: white;
+	font-family: 'Syne';
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+#login .forgot-password {
+	display: block;
+	text-align: center;
+	text-decoration: underline;
+	color: inherit;
+}
+
+.login-page a:focus-visible,
+#login input:focus-visible,
+#login button:focus-visible {
+	outline: 2px solid #1D6154;
+	outline-offset: 3px;
+}
+
+.login-page footer {
+	background-color: white;
+}
+
+.login-page footer nav {
+	max-width: 1140px;
+	margin: auto;
+}
+
+.login-page footer nav ul {
+	margin: 20px 0;
+}
+
+.login-page footer nav li {
+	font-size: 14px;
 }
