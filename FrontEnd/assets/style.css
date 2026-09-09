@@ -125,6 +125,42 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+.filters {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 50px;
+}
+
+.filters:empty {
+	display: none;
+}
+
+.filters button {
+	min-width: 100px;
+	padding: 9px 20px;
+	border: 1px solid #1D6154;
+	border-radius: 60px;
+	background-color: transparent;
+	color: #1D6154;
+	font-family: 'Syne';
+	font-size: 16px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.filters button[aria-pressed="true"],
+.filters button:hover {
+	background-color: #1D6154;
+	color: white;
+}
+
+.filters button:focus-visible {
+	outline: 2px solid #1D6154;
+	outline-offset: 3px;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -185,4 +221,3 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
-
