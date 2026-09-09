@@ -326,6 +326,22 @@ footer nav ul {
 	color: inherit;
 }
 
+#login-error {
+	color: #B3261E;
+	text-align: center;
+	line-height: 1.4;
+	margin-bottom: 16px;
+}
+
+#login-error:empty {
+	display: none;
+}
+
+#login button:disabled {
+	opacity: 0.65;
+	cursor: wait;
+}
+
 .login-page a:focus-visible,
 #login input:focus-visible,
 #login button:focus-visible {
