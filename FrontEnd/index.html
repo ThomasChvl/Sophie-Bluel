@@ -9,16 +9,21 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="./assets/modal.js" defer></script>
 	<script src="./assets/script.js" defer></script>
 </head>
 <body>
+<div class="edit-banner" id="edit-banner" hidden>
+	<img src="./assets/icons/edit.svg" alt="">
+	<span>Mode édition</span>
+</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="#portfolio">projets</a></li>
 			<li><a href="#contact">contact</a></li>
-			<li><a href="./login.html">login</a></li>
+			<li><a href="./login.html" id="login-link">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -36,7 +41,12 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="portfolio-heading">
+			<h2>Mes Projets</h2>
+			<button type="button" id="edit-gallery" class="edit-gallery" aria-haspopup="dialog" aria-controls="photo-modal" hidden>
+				<img src="./assets/icons/edit.svg" alt=""> modifier
+			</button>
+		</div>
 		<div class="filters" role="group" aria-label="Filtrer les projets par catégorie"></div>
 		<p id="gallery-message" role="status"></p>
 		<div class="gallery" id="gallery"></div>
@@ -55,6 +65,41 @@
 		</form>
 	</section>
 </main>
+
+<dialog id="photo-modal" class="photo-modal" aria-labelledby="modal-title">
+	<div class="modal-toolbar">
+		<button type="button" id="modal-back" class="modal-icon-button" aria-label="Retour à la galerie photo" hidden>←</button>
+		<button type="button" id="modal-close" class="modal-icon-button" aria-label="Fermer la modale" autofocus>×</button>
+	</div>
+	<h2 id="modal-title" tabindex="-1">Galerie photo</h2>
+	<div id="modal-gallery-view" class="modal-content">
+		<p id="modal-gallery-message" role="status">Chargement des projets…</p>
+		<div id="modal-gallery" class="modal-gallery"></div>
+		<div class="modal-actions">
+			<button type="button" id="show-add-photo" class="modal-primary-button">Ajouter une photo</button>
+		</div>
+	</div>
+	<div id="modal-add-view" class="modal-content" hidden>
+		<form id="add-photo-form">
+			<div class="photo-upload">
+				<img src="./assets/icons/photo.svg" alt="" class="photo-placeholder">
+				<label class="photo-upload-label" for="photo-file">+ Ajouter photo</label>
+				<input type="file" id="photo-file" name="image" accept="image/jpeg,image/png" aria-describedby="photo-help" required>
+				<p id="photo-help">jpg, png : 4mo max</p>
+			</div>
+			<label for="photo-title">Titre</label>
+			<input type="text" id="photo-title" name="title" required>
+			<label for="photo-category">Catégorie</label>
+			<select id="photo-category" name="category" required>
+				<option value=""></option>
+			</select>
+			<p id="modal-form-message" role="status"></p>
+			<div class="modal-actions">
+				<button type="submit" class="modal-primary-button" disabled>Valider</button>
+			</div>
+		</form>
+	</div>
+</dialog>
 
 <footer>
 	<nav>

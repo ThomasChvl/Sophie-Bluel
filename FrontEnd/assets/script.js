@@ -74,9 +74,11 @@ async function loadWorks() {
 		const works = await response.json();
 		displayWorks(works);
 		displayFilters(works);
+		displayModalWorks(works);
 	} catch (error) {
 		console.error("Impossible de récupérer les projets :", error);
 		galleryMessage.textContent = "Impossible de charger les projets. Veuillez réessayer plus tard.";
+		document.querySelector("#modal-gallery-message").textContent = galleryMessage.textContent;
 	}
 }
 
