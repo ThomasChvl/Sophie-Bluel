@@ -9,6 +9,10 @@ const categorySelect = document.querySelector("#photo-category");
 const formMessage = document.querySelector("#modal-form-message");
 let categoriesLoaded = false;
 let categoriesLoading = false;
+let photoCategories = [];
+let deletionInProgress = false;
+const deleteError = document.querySelector("#modal-delete-error");
+const reconnectLink = document.querySelector("#modal-login-link");
 
 // Le token détermine l'affichage du mode édition. L'API contrôlera les actions autorisées.
 function hasSession() {
@@ -49,8 +53,8 @@ function displayModalWorks(works) {
 		deleteButton.type = "button";
 		deleteButton.className = "delete-photo";
 		deleteButton.setAttribute("aria-label", `Supprimer ${work.title}`);
-		// La suppression sera branchée à l'étape 3.2.
-		deleteButton.disabled = true;
+		deleteButton.disabled = deletionInProgress;
+		deleteButton.addEventListener("click", () => deleteWork(work.id));
 		const icon = document.createElement("img");
 		icon.src = "./assets/icons/trash.svg";
 		icon.alt = "";
@@ -63,6 +67,56 @@ function displayModalWorks(works) {
 	document.querySelector("#modal-gallery-message").textContent = works.length === 0
 		? "Aucun projet à afficher."
 		: "";
+}
+
+async function deleteWork(workId) {
+	if (deletionInProgress) return;
+	deleteError.textContent = "";
+	reconnectLink.hidden = true;
+	deletionInProgress = true;
+	document.querySelectorAll(".delete-photo").forEach((button) => button.disabled = true);
+
+	const controller = new AbortController();
+	const timeout = setTimeout(() => controller.abort(), 10000);
+
+	try {
+		const token = sessionStorage.getItem("token");
+		if (!token) {
+			deleteError.textContent = "Reconnectez-vous pour supprimer un projet.";
+			reconnectLink.hidden = false;
+			return;
+		}
+
+		const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
+			method: "DELETE",
+			headers: { Authorization: `Bearer ${token}` },
+			signal: controller.signal,
+		});
+
+		if (response.status === 401 || response.status === 403) {
+			deleteError.textContent = "Votre session ne permet plus de supprimer ce projet. Veuillez vous reconnecter.";
+			reconnectLink.hidden = false;
+			return;
+		}
+
+		if (!response.ok) {
+			deleteError.textContent = "Le projet n’a pas pu être supprimé. Veuillez réessayer.";
+			return;
+		}
+
+		// L'API renvoie 204, sans contenu : aucune lecture JSON n'est nécessaire.
+		removeWorkFromPage(workId);
+		document.querySelector("#modal-gallery-message").textContent = allWorks.length === 0
+			? "Projet supprimé. Aucun projet à afficher."
+			: "Projet supprimé.";
+		if (photoModal.open && !galleryView.hidden) modalTitle.focus();
+	} catch {
+		deleteError.textContent = "La suppression n’a pas pu être confirmée. Vérifiez votre connexion puis réessayez.";
+	} finally {
+		clearTimeout(timeout);
+		deletionInProgress = false;
+		document.querySelectorAll(".delete-photo").forEach((button) => button.disabled = false);
+	}
 }
 
 function showModalView(view) {
@@ -85,6 +139,7 @@ async function loadPhotoCategories() {
 		const response = await fetch("http://localhost:5678/api/categories");
 		if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
 		const categories = await response.json();
+		photoCategories = categories;
 
 		categories.forEach((category) => {
 			const option = document.createElement("option");
@@ -100,6 +155,7 @@ async function loadPhotoCategories() {
 	} finally {
 		categoriesLoading = false;
 		categorySelect.disabled = false;
+		updateUploadButton();
 	}
 }
 
@@ -135,10 +191,7 @@ photoModal.addEventListener("click", (event) => {
 // Le dialogue natif gère Échap et garde la navigation au clavier dans la modale.
 photoModal.addEventListener("close", () => {
 	document.body.classList.remove("modal-open");
-	addPhotoForm.reset();
+	resetPhotoForm();
 	showModalView("gallery");
 	editGalleryButton.focus();
 });
-
-// L'envoi de la photo sera ajouté à l'étape 3.3.
-addPhotoForm.addEventListener("submit", (event) => event.preventDefault());

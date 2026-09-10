@@ -1,6 +1,25 @@
 const gallery = document.querySelector(".gallery");
 const galleryMessage = document.querySelector("#gallery-message");
 const filters = document.querySelector(".filters");
+let allWorks = [];
+
+function refreshGalleries() {
+	displayWorks(allWorks);
+	displayFilters(allWorks);
+	displayModalWorks(allWorks);
+}
+
+// Utilise le projet renvoyé par l'API, sans recharger la page ni la liste des travaux.
+function addWorkToPage(work) {
+	allWorks = [...allWorks.filter((existingWork) => existingWork.id !== work.id), work];
+	refreshGalleries();
+}
+
+// Met à jour les deux galeries et les filtres après confirmation de la suppression.
+function removeWorkFromPage(workId) {
+	allWorks = allWorks.filter((work) => work.id !== workId);
+	refreshGalleries();
+}
 
 // Crée une carte pour chaque projet reçu depuis l'API.
 function displayWorks(works) {
@@ -71,10 +90,8 @@ async function loadWorks() {
 			throw new Error(`Erreur HTTP : ${response.status}`);
 		}
 
-		const works = await response.json();
-		displayWorks(works);
-		displayFilters(works);
-		displayModalWorks(works);
+		allWorks = await response.json();
+		refreshGalleries();
 	} catch (error) {
 		console.error("Impossible de récupérer les projets :", error);
 		galleryMessage.textContent = "Impossible de charger les projets. Veuillez réessayer plus tard.";

@@ -10,6 +10,7 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="./assets/modal.js" defer></script>
+	<script src="./assets/upload.js" defer></script>
 	<script src="./assets/script.js" defer></script>
 </head>
 <body>
@@ -73,6 +74,8 @@
 	</div>
 	<h2 id="modal-title" tabindex="-1">Galerie photo</h2>
 	<div id="modal-gallery-view" class="modal-content">
+		<p id="modal-delete-error" role="alert"></p>
+		<a id="modal-login-link" href="./login.html" hidden>Se reconnecter</a>
 		<p id="modal-gallery-message" role="status">Chargement des projets…</p>
 		<div id="modal-gallery" class="modal-gallery"></div>
 		<div class="modal-actions">
@@ -80,22 +83,27 @@
 		</div>
 	</div>
 	<div id="modal-add-view" class="modal-content" hidden>
-		<form id="add-photo-form">
-			<div class="photo-upload">
-				<img src="./assets/icons/photo.svg" alt="" class="photo-placeholder">
-				<label class="photo-upload-label" for="photo-file">+ Ajouter photo</label>
-				<input type="file" id="photo-file" name="image" accept="image/jpeg,image/png" aria-describedby="photo-help" required>
-				<p id="photo-help">jpg, png : 4mo max</p>
-			</div>
-			<label for="photo-title">Titre</label>
-			<input type="text" id="photo-title" name="title" required>
-			<label for="photo-category">Catégorie</label>
-			<select id="photo-category" name="category" required>
-				<option value=""></option>
-			</select>
+		<form id="add-photo-form" novalidate>
+			<fieldset id="photo-fields">
+				<div class="photo-upload">
+					<img src="./assets/icons/photo.svg" alt="" class="photo-placeholder">
+					<img id="photo-preview" alt="Aperçu de la photo sélectionnée" hidden>
+					<label class="photo-upload-label" for="photo-file">+ Ajouter photo</label>
+					<input type="file" id="photo-file" name="image" accept="image/jpeg,image/png" aria-describedby="photo-help" required>
+					<p id="photo-help">jpg, png : 4mo max</p>
+				</div>
+				<label for="photo-title">Titre</label>
+				<input type="text" id="photo-title" name="title" required>
+				<label for="photo-category">Catégorie</label>
+				<select id="photo-category" name="category" required>
+					<option value=""></option>
+				</select>
+			</fieldset>
 			<p id="modal-form-message" role="status"></p>
+			<p id="photo-upload-error" role="alert"></p>
+			<a id="photo-upload-login" href="./login.html" hidden>Se reconnecter</a>
 			<div class="modal-actions">
-				<button type="submit" class="modal-primary-button" disabled>Valider</button>
+				<button type="submit" id="upload-photo" class="modal-primary-button" disabled>Valider</button>
 			</div>
 		</form>
 	</div>
